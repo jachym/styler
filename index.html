@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Styler</title>
+        <!-- script src='http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAeDjUod8ItM9dBg5_lz0esxTnme5EwnLVtEDGnh-lFVzRJhbdQhQBX5VH8Rb3adNACjSR5kaCLQuBmw'></script-->
+        <link rel="stylesheet" type="text/css" href="/wwwlibs/ext/ext3/resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="externals/ux/colorpicker/color-picker.ux.css" />
+        <link rel="stylesheet" type="text/css" href="/wwwlibs/ext/ext3/resources/css/xtheme-gray.css" />
+        <link rel="stylesheet" type="text/css" href="theme/css/styler.css" />
+        
+        <script type="text/javascript" src="/wwwlibs/ext/ext3/adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="/wwwlibs/ext/ext3/ext-all.js"></script>
+
+        <script type="text/javascript" src="externals/ux/colorpicker/color-picker.ux.js"></script>
+
+        <script type="text/javascript" src="/wwwlibs/hslayers/build/OpenLayers.js"></script>
+        <!-- script type="text/javascript" src="script/OpenLayers.js"></script-->
+        <script type="text/javascript" src="script/Styler.js"></script>
+        <script type="text/javascript" src="script/tree.js"></script>
+        <script type="text/javascript" src="script/core.js"></script>
+
+
+        <script type="text/javascript" src="script/Styler/OpenLayers-patch.js"></script>
+
+        <script type="text/javascript" src="script/Styler/AttributesReader.js"></script>
+        <script type="text/javascript" src="script/Styler/AttributesStore.js"></script>
+        <script type="text/javascript" src="script/Styler/ColorField.js"></script>
+        <script type="text/javascript" src="script/Styler/ColorManager.js"></script>
+        <script type="text/javascript" src="script/Styler/ComarisonComboBox.js"></script>
+        <script type="text/javascript" src="script/Styler/FeatureRenderer.js"></script>
+        <script type="text/javascript" src="script/Styler/FillSymbolizer.js"></script>
+        <script type="text/javascript" src="script/Styler/FilterBuilder.js"></script>
+        <script type="text/javascript" src="script/Styler/FilterPanel.js"></script>
+        <script type="text/javascript" src="script/Styler/FontComboBox.js"></script>
+        <script type="text/javascript" src="script/Styler/LegendPanel.js"></script>
+        <script type="text/javascript" src="script/Styler/LineSymbolizer.js"></script>
+        <script type="text/javascript" src="script/Styler/MultiSlider.js"></script>
+        <script type="text/javascript" src="script/Styler/MultiSliderTip.js"></script>
+        <script type="text/javascript" src="script/Styler/PointSymbolizer.js"></script>
+        <script type="text/javascript" src="script/Styler/PolygonSymbolizer.js"></script>
+        <script type="text/javascript" src="script/Styler/RulePanel.js"></script>
+        <script type="text/javascript" src="script/Styler/ScaleLimitPanel.js"></script>
+        <script type="text/javascript" src="script/Styler/ScaleSlider.js"></script>
+        <script type="text/javascript" src="script/Styler/SliderTip.js"></script>
+        <script type="text/javascript" src="script/Styler/ScaleSliderTip.js"></script>
+        <script type="text/javascript" src="script/Styler/SchemaManager.js"></script>
+        <script type="text/javascript" src="script/Styler/SLDManager.js"></script>
+        <script type="text/javascript" src="script/Styler/StrokeSymbolizer.js"></script>
+        <script type="text/javascript" src="script/Styler/TextSymbolizer.js"></script>
+        <script type="text/javascript" src="script/Styler/Util.js"></script>
+
+
+        <!-- script type="text/javascript" src="/wwwlibs/openlayers/2.11/lib/OpenLayers/Format/SLD/v1.js"></script>
+        <script type="text/javascript" src="/wwwlibs/openlayers/2.11/lib/OpenLayers/Format/SLD/v1_0_0.js"></script-->
+
+
+        <script type="text/javascript">
+            var styler;
+            var LAYMAN_URL = "/cgi-bin/layman/layman";
+
+            var init = function() {
+                styler = new Styler;
+            }
+        </script>
+    </head>
+    <body onload="init()">
+    </body>
+</html>
