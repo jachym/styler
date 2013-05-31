@@ -30,7 +30,9 @@ Styler.SLDManager = OpenLayers.Class({
     getUrl: function (layer, styleName) {
         var url;
         if (window.LAYMAN_URL) {
-                url = LAYMAN_URL+"/geoserver/style/"+styleName;
+                var path = layer.url.split("/");
+
+                url = LAYMAN_URL+"/geoserver/style/"+path[path.length-1]+"/"+styleName;
         }
         else {
             if (layer instanceof OpenLayers.Layer.WMS) {

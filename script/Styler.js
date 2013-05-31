@@ -81,16 +81,28 @@ Ext.extend(Styler, Ext.util.Observable, {
         });
         r.callback =  callback;
     },
+
+    /**
+     * Parse WMS capabilities and collect layers
+     */
     parseWMSCapabilities: function (response) {
         var capabilities = new OpenLayers.Format.WMSCapabilities().read(response.responseXML.documentElement ? response.responseXML : response.responseText);
         this.wmsLayerList = capabilities.capability.layers;
         response.callback();
     },
+    
+    /**
+     * Parse WFS capabilities and collect featureTypes
+     */
     parseWFSCapabilities: function (response ) {
         var capabilities = new OpenLayers.Format.WFSCapabilities().read(response.responseXML.documentElement ? response.responseXML : response.responseText);
         this.wfsLayerList = capabilities.featureTypeList.featureTypes;
         response.callback();
     },
+
+    /**
+     * Put results of WMS GetCapabilities and WFS GetCapabilities together
+     */
     mergeCapabilities: function () {
         this.layerList = [];
         var layer, name;
@@ -523,7 +535,7 @@ Ext.extend(Styler, Ext.util.Observable, {
                 }).createDelegate(this),
 
                 attributes: new Styler.data.AttributesStore({
-                    url: OpenLayers.Util.urlAppend(OpenLayers.ProxyHost,escape(OpenLayers.Util.urlAppend(OWS_URL),"version=1.1.1&request=DescribeFeatureType&typename="+layer.params["LAYERS"])),
+                    url: OpenLayers.Util.urlAppend(OpenLayers.ProxyHost,escape(OpenLayers.Util.urlAppend(OWS_URL),"version=1.1.1&service=wfs&request=DescribeFeatureType&typename="+layer.params["LAYERS"])),
                     //baseParams: {
                     //    version: "1.1.1",
                     //    request: "DescribeFeatureType",

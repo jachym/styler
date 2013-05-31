@@ -10,7 +10,7 @@ Styler.SchemaManager = OpenLayers.Class({
             layer = this.map.layers[i];
             if (layer instanceof OpenLayers.Layer.WMS) {
                 this.attributesStores[layer.id] = new Styler.data.AttributesStore({
-                    url: OpenLayers.ProxyHost+escape(layer.url.split("?")[0].replace("/wms", "/wfs")+"?version=1.1.1&request=DescribeFeatureType&typename="+layer.params["LAYERS"]),
+                    url: OpenLayers.ProxyHost+escape(layer.url.split("?")[0].replace("/wms", "/wfs")+"?service=wfs&version=1.1.1&request=DescribeFeatureType&typename="+layer.params["LAYERS"]),
                     baseParams: {
                         version: "1.1.1",
                         request: "DescribeFeatureType",
