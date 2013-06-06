@@ -1,7 +1,12 @@
 var OWS_URL = "http://88.86.113.236/geoserver/ows?";
 
 var Styler = function () {
-    this.addEvents("layerchanged", "ruleadded", "ruleremoved", "ruleupdated");
+
+
+
+
+
+    this.addEvents("initialized","layerchanged", "ruleadded", "ruleremoved", "ruleupdated");
 
     var params = OpenLayers.Util.getParameters();
     
@@ -19,7 +24,9 @@ var Styler = function () {
     }], function () {
         this.createLayers();
         this.getSchemas(this.initEditor.createDelegate(this));
+        this.fireEvent("initialized");
     }, this);
+
 };
 
 Ext.extend(Styler, Ext.util.Observable, {
@@ -81,28 +88,20 @@ Ext.extend(Styler, Ext.util.Observable, {
         });
         r.callback =  callback;
     },
-
-    /**
-     * Parse WMS capabilities and collect layers
-     */
     parseWMSCapabilities: function (response) {
-        var capabilities = new OpenLayers.Format.WMSCapabilities().read(response.responseXML.documentElement ? response.responseXML : response.responseText);
+
+
+        var capabilities = new OpenLayers.Format.WMSCapabilities().read(Styler.getContent(response));
         this.wmsLayerList = capabilities.capability.layers;
         response.callback();
     },
-    
-    /**
-     * Parse WFS capabilities and collect featureTypes
-     */
     parseWFSCapabilities: function (response ) {
-        var capabilities = new OpenLayers.Format.WFSCapabilities().read(response.responseXML.documentElement ? response.responseXML : response.responseText);
+        var format = new OpenLayers.Format.WFSCapabilities();
+        var content = Styler.getContent(response);
+        var capabilities = format.read(content);
         this.wfsLayerList = capabilities.featureTypeList.featureTypes;
         response.callback();
     },
-
-    /**
-     * Put results of WMS GetCapabilities and WFS GetCapabilities together
-     */
     mergeCapabilities: function () {
         this.layerList = [];
         var layer, name;
@@ -113,7 +112,6 @@ Ext.extend(Styler, Ext.util.Observable, {
 
                 var wfsLayer = this.wfsLayerList[j];
                 var wfsName = wfsLayer.name;
-                // FIXME: this does not work
                 //if (wfsLayer.featureNS) {
                 //    wfsName = wfsLayer.featureNS+":"+wfsLayer.name;
                 //}
@@ -216,7 +214,14 @@ Ext.extend(Styler, Ext.util.Observable, {
             items: {
                 layout: "border",
                 deferredRender: false,
-                items: [this.mapPanel, westPanel]
+                items: [
+                    new Ext.BoxComponent(
+                    {
+                        heigth: 50,
+                        el: "superhead",
+                        region: "north"
+                    }),
+                    this.mapPanel, westPanel]
             }
         });
         this.map = this.mapPanel.map;
@@ -512,6 +517,7 @@ Ext.extend(Styler, Ext.util.Observable, {
         if (this.ruleDlg) {
             this.ruleDlg.destroy();
         }
+
         this.ruleDlg = new Ext.Window({
             title: "Style: " + (rule.title || rule.name || "Untitled"),
             layout: "fit",
@@ -535,7 +541,8 @@ Ext.extend(Styler, Ext.util.Observable, {
                 }).createDelegate(this),
 
                 attributes: new Styler.data.AttributesStore({
-                    url: OpenLayers.Util.urlAppend(OpenLayers.ProxyHost,escape(OpenLayers.Util.urlAppend(OWS_URL),"version=1.1.1&service=wfs&request=DescribeFeatureType&typename="+layer.params["LAYERS"])),
+                    url: OpenLayers.Request.makeSameOrigin(
+                             OpenLayers.Util.urlAppend(OWS_URL,"service=wfs&version=1.1.1&request=DescribeFeatureType&typename="+layer.params["LAYERS"]),OpenLayers.ProxyHost),
                     //baseParams: {
                     //    version: "1.1.1",
                     //    request: "DescribeFeatureType",
@@ -636,7 +643,7 @@ Ext.extend(Styler, Ext.util.Observable, {
         OpenLayers.Request.GET({
             url: OWS_URL,
             success: function (response) {
-                var features = new OpenLayers.Format.GML().read(response.responseXML || response.responseText);
+                var features = new OpenLayers.Format.GML().read(Styler.getContent(response));
                 if (features.length) {
                     callback.call(this, features);
                 } else {
@@ -696,3 +703,30 @@ Styler.dispatch = function (functions, complete, scope) {
     }
 };
 
+
+Styler.getContent = function(response) {
+        var content;
+        // God mess IE
+        if(false && Ext.isIE) {
+            content=response.responseText;
+            var xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+            // required or IE will attempt to validate against DTD, which could fail
+            // because the dtd is not accessibile and we don't really care
+            // we will notice later if any layer was loaded from the response anyway
+            xmlDoc.async = false;
+            xmlDoc.validateOnParse = false;
+            xmlDoc.resolveExternals = false;
+            var parsed=xmlDoc.loadXML(content);
+            if(!parsed) {
+                var myErr = xmlDoc.parseError;
+                alert(myErr.reason);
+            } else {
+                content=xmlDoc;
+            }
+        }
+        else {
+            content = response.responseXML ? response.responseXML : response.responseText;
+        }
+
+        return content;
+};
