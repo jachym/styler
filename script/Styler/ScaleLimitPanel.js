@@ -21,7 +21,6 @@ Styler.ScaleLimitPanel = Ext.extend(Ext.Panel, {
         this.bodyStyle = {
             padding: "5px"
         };
-        console.log(this.maxScaleLimit, this.minScaleLimit);
         this.scaleSliderTemplate = new Ext.Template(this.scaleSliderTemplate);
         Ext.applyIf(this, {
             minScaleDenominator: this.minScaleLimit,

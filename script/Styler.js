@@ -232,6 +232,11 @@ Ext.extend(Styler, Ext.util.Observable, {
         var layers = new Array(num + 1);
         layers[0] = new OpenLayers.Layer.OSM("OSM");
         for (var i = 0; i < num; ++i) {
+            var maxExtent = new OpenLayers.Bounds(layerList[i].llbbox[0], layerList[i].llbbox[1], layerList[i].llbbox[2], layerList[i].llbbox[3]).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
+            maxExtent.left = (maxExtent.left < map.maxExtent.left ? map.maxExtent.left : maxExtent.left);
+            maxExtent.right = (maxExtent.right < map.maxExtent.right ? map.maxExtent.right : maxExtent.right);
+            maxExtent.bottom = (maxExtent.bottom > map.maxExtent.bottom ? map.maxExtent.bottom : maxExtent.bottom);
+            maxExtent.top = (maxExtent.top > map.maxExtent.top ? map.maxExtent.top : maxExtent.top);
             layers[i + 1] = new OpenLayers.Layer.WMS(layerList[i].title, OWS_URL, {
                 layers: layerList[i].name,
                 styles: layerList[i].styles[0].name,
@@ -242,7 +247,7 @@ Ext.extend(Styler, Ext.util.Observable, {
                 isBaseLayer: false,
                 displayOutsideMaxExtent: true,
                 visibility: false,
-                maxExtent: new OpenLayers.Bounds(layerList[i].llbbox[0], layerList[i].llbbox[1], layerList[i].llbbox[2], layerList[i].llbbox[3]).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"))
+                maxExtent: maxExtent
             });
         }
         this.layerTree = new Ext.tree.TreePanel({
