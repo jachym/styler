@@ -230,6 +230,7 @@ Ext.extend(Styler, Ext.util.Observable, {
         var layerList = this.layerList;
         var num = layerList.length;
         var layers = new Array(num + 1);
+        var map = this.map;
         layers[0] = new OpenLayers.Layer.OSM("OSM");
         for (var i = 0; i < num; ++i) {
             var maxExtent = new OpenLayers.Bounds(layerList[i].llbbox[0], layerList[i].llbbox[1], layerList[i].llbbox[2], layerList[i].llbbox[3]).transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
